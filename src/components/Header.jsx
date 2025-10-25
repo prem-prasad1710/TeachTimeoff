@@ -15,7 +15,7 @@ export default function Header({onOpenRequest}){
         <button className="btn btn-ghost" onClick={onOpenRequest}>Request Leave</button>
         <div className="top-user">
           <div style={{textAlign:'right'}}>
-            <div className="name">Dr. Himanshu Gola</div>
+            <div className="name">Kritika Yadav</div>
             <div style={{fontSize:12,color:'var(--muted)'}}>Admin</div>
           </div>
           <img src="https://i.pravatar.cc/100?img=12" alt="avatar" />

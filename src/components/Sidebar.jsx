@@ -7,7 +7,7 @@ export default function Sidebar(){
       <div style={{display:'flex',alignItems:'center',gap:10}}>
         <img src="https://i.pravatar.cc/80?img=12" style={{width:44,height:44,borderRadius:8}}/>
         <div>
-          <div style={{fontWeight:700}}>Dr. Himanshu Gola</div>
+          <div style={{fontWeight:700}}>Kritika Yadav</div>
           <div style={{fontSize:12,opacity:0.85}}>Assistant Professor</div>
         </div>
       </div>

@@ -8,11 +8,22 @@ const recent = [
 ]
 
 export default function Dashboard(){
+  const [profile, setProfile] = React.useState({ name: 'kritika', email: 'kritika.yadav@jims.edu', department: 'Computer Applications' })
+
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem('profileUser')
+      if (raw) setProfile(JSON.parse(raw))
+    } catch (err) {
+      // ignore
+    }
+  }, [])
+
   return (
     <div>
       <div className="page-title">
         <div>
-          <h2 style={{margin:0}}>Welcome, kritika</h2>
+          <h2 style={{margin:0}}>Welcome, {profile.name.split(' ')[0] || profile.name}</h2>
           <div style={{color:'var(--muted)'}}>Faculty Dashboard</div>
         </div>
       </div>
@@ -22,9 +33,9 @@ export default function Dashboard(){
           <div className="profile-card">
             <img src="https://i.pravatar.cc/150?img=12" alt="avatar" />
             <div className="profile-meta">
-              <div className="title">Dr. kritika yadav</div>
-              <div className="muted">himanshu.gola@jims.edu</div>
-              <div style={{marginTop:8}}>Computer Applications — Assistant Professor</div>
+              <div className="title">{profile.name}</div>
+              <div className="muted">{profile.email}</div>
+              <div style={{marginTop:8}}>{profile.department || 'Computer Applications'} — Assistant Professor</div>
             </div>
             <div style={{marginLeft:'auto'}}>
               <button className="btn btn-ghost">Profile</button>
@@ -76,14 +87,8 @@ export default function Dashboard(){
       </div>
 
       <div className="content-row">
-        <div>
+        <div style={{width: '100%'}}>
           <DashboardChart />
-        </div>
-        <div>
-          <div className="summary-card">
-            <div style={{fontWeight:700}}>Quick Stats</div>
-            <div style={{marginTop:8,color:'var(--muted)'}}>Pending requests, balances and more</div>
-          </div>
         </div>
       </div>
     </div>
