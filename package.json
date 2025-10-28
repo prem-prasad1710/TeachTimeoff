@@ -1,0 +1,8 @@
+{
+    "name": "teachtimeoff-root",
+    "private": true,
+    "scripts": {
+        "start": "npm --prefix TechTimeoff start",
+        "dev": "npm --prefix TechTimeoff run dev"
+    }
+}
