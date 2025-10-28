@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_cors import CORS
 import mysql.connector
 import os
-from TechTimeoff.urgent import combined_urgency  # ✅ Your AI function (import via package path)
+from TechTimeoff.urgent import combined_urgency  # ✅ Your AI function (module inside `TechTimeoff`)
 
 app = Flask(__name__)
 CORS(app)

@@ -1,5 +1,5 @@
 from textblob import TextBlob
-from Urgency import detect_urgency
+from .Urgency import detect_urgency
 import argparse
 
 """urgent.py
