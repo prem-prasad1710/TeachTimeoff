@@ -91,6 +91,33 @@ export default function Dashboard(){
           <DashboardChart />
         </div>
       </div>
+
+      <div className="dashboard-hamburger" style={{marginBottom:18}}>
+        <button
+          className="hamburger-btn"
+          onClick={() => window.dispatchEvent(new CustomEvent('toggleSidebar'))}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 36,
+            width: 36,
+            borderRadius: 6,
+            transition: 'background 0.2s',
+          }}
+          aria-label="Toggle sidebar"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect y="5" width="24" height="2.5" rx="1.25" fill="#2563eb" />
+            <rect y="11" width="24" height="2.5" rx="1.25" fill="#2563eb" />
+            <rect y="17" width="24" height="2.5" rx="1.25" fill="#2563eb" />
+          </svg>
+        </button>
+      </div>
     </div>
   )
 }
