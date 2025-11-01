@@ -2,13 +2,12 @@ import React from 'react'
 
 export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
   return (
-    <div className="topbar" style={{
-      width: '100%',
+    <div className={`topbar ${sidebarOpen ? 'shifted' : ''}`} style={{
       position: 'relative', // Ensure navbar is not fixed or sticky
       top: 'unset',
       left: 'unset',
-      zIndex: 10,
-      background: 'rgba(255,255,255,0.85)',
+      zIndex: 200,
+      background: 'rgba(255,255,255,0.95)',
       boxShadow: '0 2px 8px rgba(44,62,255,0.07)',
       backdropFilter: 'blur(4px)'
     }}>
@@ -17,11 +16,8 @@ export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
           className="hamburger-btn"
           onClick={onToggleSidebar}
           style={{
-            position: 'absolute',
-            top: 14,
-            left: 14,
             background: 'none',
-            border: 'none',
+            outline: 'none',
             padding: 0,
             cursor: 'pointer',
             display: 'inline-flex',
@@ -29,6 +25,7 @@ export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
             justifyContent: 'center',
             height: 36,
             width: 36,
+            marginRight: 6,
             borderRadius: 6,
             transition: 'background 0.2s',
             backgroundColor: sidebarOpen ? 'rgba(37,99,235,0.08)' : 'transparent',

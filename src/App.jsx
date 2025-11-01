@@ -16,7 +16,7 @@ export default function App() {
       <Header onOpenRequest={()=>setOpenDrawer(true)} onToggleSidebar={()=>setSidebarOpen(v=>!v)} sidebarOpen={sidebarOpen} />
       <div className="app-body">
         <Sidebar open={sidebarOpen} onClose={()=>setSidebarOpen(false)} />
-        <main className="main-root" style={{marginLeft: sidebarOpen ? 240 : 0, transition:'margin-left 0.3s'}}>
+        <main className={`main-root ${sidebarOpen ? 'shifted' : ''}`}>
           <Routes>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
