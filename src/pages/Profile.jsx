@@ -297,19 +297,6 @@ export default function Profile() {
           </div>
         </div>
       </div>
-
-      {/* Leave Balances Section */}
-      <div className="card">
-        <h3 style={{ marginTop: 0 }}>Leave Balances</h3>
-        <div className="leaves-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {balances.map(b => (
-            <div className="leave-balance" key={b.type} style={{ padding: '16px', background: 'var(--background)', borderRadius: '8px' }}>
-              <div style={{ color: 'var(--muted)' }}>{b.type}</div>
-              <div style={{ fontSize: 20, fontWeight: 800 }}>{b.days} days</div>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
