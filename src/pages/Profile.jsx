@@ -283,7 +283,7 @@ export default function Profile() {
       {/* Professional Information Section */}
       <div className="card" style={{ marginBottom: '24px', padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h3  style={{ margin: 0 }}>Professional Information</h3>
+          <h3 style={{ margin: 0 }}>Professional Information</h3>
         </div>
         <div>
           <EditableField label="Department" value={user.department} field="department" />
