@@ -195,16 +195,16 @@ export default function Profile() {
       </div>
 
       {/* Personal Information Section */}
-      <div className="card" style={{ marginBottom: '24px', padding: '24px' }}>
+      <div className="card" style={{ marginBottom: '32px', padding: '32px', minHeight: '400px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
         <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '20px'
+            marginBottom: '28px'
           }}
         >
-          <h3 style={{ margin: 0 }}>Personal Information</h3>
+          <h3 style={{ margin: 0, fontSize: '1.5rem' }}>Personal Information</h3>
         </div>
         <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
           <div className="profile-image-container" style={{ position: 'relative' }}>
@@ -259,7 +259,7 @@ export default function Profile() {
             <input type="file" ref={fileInputRef} onChange={handleImageChange} accept="image/*" style={{ display: 'none' }} />
           </div>
 
-          <div className="profile-details" style={{ flex: 1 }}>
+          <div className="profile-details" style={{ flex: 1, marginTop: '12px' }}>
             <EditableField label="Full Name" value={user.name} field="name" />
             <EditableField label="Email Address" value={user.email} field="email" />
             <EditableField label="Mobile Number" value={user.phone} field="phone" />
@@ -281,9 +281,9 @@ export default function Profile() {
       </div>
 
       {/* Professional Information Section */}
-      <div className="card" style={{ marginBottom: '24px', padding: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h3 style={{ margin: 0 }}>Professional Information</h3>
+      <div className="card" style={{ marginBottom: '32px', padding: '32px', minHeight: '400px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+          <h3 style={{ margin: 0, fontSize: '1.5rem' }}>Professional Information</h3>
         </div>
         <div>
           <EditableField label="Department" value={user.department} field="department" />

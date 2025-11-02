@@ -13,6 +13,109 @@ export default function Dashboard(){
   const navigate = useNavigate()
   const [profile, setProfile] = React.useState({ name: 'kritika', email: 'kritika.yadav@jims.edu', department: 'Computer Applications' })
   const [profileImage, setProfileImage] = React.useState(null)
+  const [selectedType, setSelectedType] = useState('all')
+  const [selectedStatus, setSelectedStatus] = useState('all')
+  const [searchText, setSearchText] = useState('')
+
+  const [leaveHistory] = useState([
+    {
+      id: 1,
+      dates: '23 Oct - 24 Oct 2025',
+      days: '2 Days',
+      type: 'Earned Leave',
+      requestDate: '29 Sep 2025',
+      status: 'Approved',
+      approver: 'Amit Bora',
+      requestedBy: 'Himanshu Gola',
+      actionOn: '06 Oct 2025',
+      note: 'Taking leave for family commitment'
+    },
+    {
+      id: 2,
+      dates: '01 Oct 2025',
+      days: '1 Day',
+      type: 'Floater Leave',
+      requestDate: '24 Sep 2025',
+      status: 'Approved',
+      approver: 'Amit Bora',
+      requestedBy: 'Himanshu Gola',
+      actionOn: '25 Sep 2025',
+      note: 'Floater Leave'
+    },
+    {
+      id: 3,
+      dates: '26 Sept 2025',
+      days: '1 Day',
+      type: 'Sick Leave',
+      requestDate: '26 Sep 2025',
+      status: 'Approved',
+      approver: 'Amit Bora',
+      requestedBy: 'Himanshu Gola',
+      actionOn: '29 Sep 2025',
+      note: 'Not well today'
+    }
+    ,
+    {
+      id: 4,
+      dates: '12 Nov 2025',
+      days: '1 Day',
+      type: 'Earned Leave',
+      requestDate: '01 Nov 2025',
+      status: 'Approved',
+      approver: 'Amit Bora',
+      requestedBy: 'Kritika Yadav',
+      actionOn: '05 Nov 2025',
+      note: 'Personal work'
+    },
+    {
+      id: 5,
+      dates: '03 Dec 2025',
+      days: '2 Days',
+      type: 'Floater Leave',
+      requestDate: '20 Nov 2025',
+      status: 'Pending',
+      approver: '',
+      requestedBy: 'Aditya Singh',
+      actionOn: '',
+      note: 'Attending a short course'
+    },
+    {
+      id: 6,
+      dates: '18 Oct 2025',
+      days: '1 Day',
+      type: 'Sick Leave',
+      requestDate: '17 Oct 2025',
+      status: 'Rejected',
+      approver: 'Amit Bora',
+      requestedBy: 'Harsimar',
+      actionOn: '18 Oct 2025',
+      note: 'Not well'
+    },
+    {
+      id: 7,
+      dates: '05 Jan 2026',
+      days: '3 Days',
+      type: 'Marriage Leave',
+      requestDate: '20 Dec 2025',
+      status: 'Approved',
+      approver: 'Amit Bora',
+      requestedBy: 'Manan Kumar',
+      actionOn: '28 Dec 2025',
+      note: 'Family event'
+    },
+    {
+      id: 8,
+      dates: '22 Feb 2026',
+      days: '1 Day',
+      type: 'Unpaid Leave',
+      requestDate: '10 Feb 2026',
+      status: 'Pending',
+      approver: '',
+      requestedBy: 'Rohit Sharma',
+      actionOn: '',
+      note: 'Personal'
+    }
+  ])
 
   React.useEffect(() => {
     try {
@@ -24,6 +127,27 @@ export default function Dashboard(){
       // ignore
     }
   }, [])
+
+  // filteredLeaves is derived from leaveHistory + filters
+  const [filteredLeaves, setFilteredLeaves] = useState(leaveHistory)
+
+  useEffect(() => {
+    const t = selectedType
+    const s = selectedStatus
+    const q = searchText.trim().toLowerCase()
+
+    const results = leaveHistory.filter(item => {
+      if (t !== 'all' && item.type !== t) return false
+      if (s !== 'all' && item.status.toLowerCase() !== s.toLowerCase()) return false
+      if (q) {
+        const hay = [item.type, item.requestedBy, item.note, item.approver, item.dates, item.actionOn, item.requestDate].join(' ').toLowerCase()
+        if (!hay.includes(q)) return false
+      }
+      return true
+    })
+
+    setFilteredLeaves(results)
+  }, [selectedType, selectedStatus, searchText, leaveHistory])
 
   return (
     <div className="dashboard-layout" style={{ background: '#f7f7f7', minHeight: '100vh', padding: '32px' }}>
@@ -139,85 +263,168 @@ export default function Dashboard(){
       {/* Leave History Section */}
       <div className="dashboard-row">
         <div className="dashboard-card leave-history-section" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: '32px' }}>
-          <h3 className="card-title" style={{ fontSize: 22, marginBottom: 18 }}>Leave History section</h3>
+          <h3 className="card-title" style={{ fontSize: 28, marginBottom: 24, color: '#111827', fontWeight: '600' }}>Leave History</h3>
+          
+          {/* Filters */}
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+            {/* Leave Type Filter */}
+            <div style={{ position: 'relative', minWidth: '180px' }}>
+              <div style={{ position: 'relative' }}>
+                <select 
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  style={{ 
+                    width: '100%', 
+                    padding: '8px 12px', 
+                    border: '1px solid #e5e7eb', 
+                    borderRadius: '6px', 
+                    appearance: 'none', 
+                    background: 'white',
+                    paddingRight: '28px' // Space for the custom arrow
+                  }}
+                >
+                  <option value="all">Leave Type</option>
+                  <option value="Earned Leave">Earned Leave</option>
+                  <option value="Floater Leave">Floater Leave</option>
+                  <option value="Sick Leave">Sick Leave</option>
+                  <option value="Marriage Leave">Marriage Leave</option>
+                  <option value="Paternity Leave">Paternity Leave</option>
+                  <option value="Special Leave">Special Leave</option>
+                </select>
+                <div style={{ 
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  pointerEvents: 'none',
+                  color: '#6b7280'
+                }}>▼</div>
+              </div>
+            </div>
+
+            {/* Status Filter */}
+            <div style={{ position: 'relative', minWidth: '180px' }}>
+              <div style={{ position: 'relative' }}>
+                <select 
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  style={{ 
+                    width: '100%', 
+                    padding: '8px 12px', 
+                    border: '1px solid #e5e7eb', 
+                    borderRadius: '6px', 
+                    appearance: 'none', 
+                    background: 'white',
+                    paddingRight: '28px'
+                  }}
+                >
+                  <option value="all">Status</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+                <div style={{ 
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  pointerEvents: 'none',
+                  color: '#6b7280'
+                }}>▼</div>
+              </div>
+            </div>
+
+            {/* Search Box */}
+            <div style={{ flex: '1', maxWidth: '300px' }}>
+              <input 
+                type="text" 
+                value={searchText}
+                placeholder="Search" 
+                onChange={(e) => setSearchText(e.target.value)}
+                style={{ 
+                  width: '100%', 
+                  padding: '8px 12px', 
+                  border: '1px solid #e5e7eb', 
+                  borderRadius: '6px',
+                  background: 'white'
+                }} 
+              />
+            </div>
+          </div>
+
           <div className="table-container">
-            <table className="leave-history-table">
+            <table className="leave-history-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  <th>Leave Dates</th>
-                  <th>Leave Type</th>
-                  <th>Status</th>
-                  <th>Requested By</th>
-                  <th>Action Taken On</th>
-                  <th>Leave Note</th>
-                  <th>Actions</th>
+                  <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', color: '#111827', fontWeight: '600' }}>Leave Dates</th>
+                  <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', color: '#111827', fontWeight: '600' }}>Leave Type</th>
+                  <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', color: '#111827', fontWeight: '600' }}>Status</th>
+                  <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', color: '#111827', fontWeight: '600' }}>Requested By</th>
+                  <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', color: '#111827', fontWeight: '600' }}>Action Taken On</th>
+                  <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', color: '#111827', fontWeight: '600' }}>Leave Note</th>
+                  <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', color: '#111827', fontWeight: '600' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  {
-                    dates: '23 Oct - 24 Oct 2025',
-                    days: '2 Days',
-                    type: 'Earned Leave',
-                    requestDate: '29 Sep 2025',
-                    status: 'Approved',
-                    approver: 'Amit Bora',
-                    requestedBy: 'Himanshu Gola',
-                    actionOn: '06 Oct 2025',
-                    note: 'Taking leave for family commitment'
-                  },
-                  {
-                    dates: '01 Oct 2025',
-                    days: '1 Day',
-                    type: 'Floater Leave',
-                    requestDate: '24 Sep 2025',
-                    status: 'Approved',
-                    approver: 'Amit Bora',
-                    requestedBy: 'Himanshu Gola',
-                    actionOn: '25 Sep 2025',
-                    note: 'Floater Leave'
-                  },
-                  {
-                    dates: '26 Sept 2025',
-                    days: '1 Day',
-                    type: 'Sick Leave',
-                    requestDate: '26 Sep 2025',
-                    status: 'Approved',
-                    approver: 'Amit Bora',
-                    requestedBy: 'Himanshu Gola',
-                    actionOn: '29 Sep 2025',
-                    note: 'Not well today'
-                  }
-                ].map((leave, idx) => (
-                  <tr key={idx}>
-                    <td>
-                      <div>{leave.dates}</div>
-                      <div className="text-muted">{leave.days}</div>
+                {(filteredLeaves.length > 0 ? filteredLeaves : leaveHistory).map((leave, idx) => (
+                  <tr key={idx} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                    <td style={{ padding: '16px 12px' }}>
+                      <div style={{ fontWeight: '500' }}>{leave.dates}</div>
+                      <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '4px' }}>{leave.days}</div>
+                      <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '2px' }}>Requested on {leave.requestDate}</div>
                     </td>
-                    <td>
-                      <div>{leave.type}</div>
-                      <div className="text-muted">Requested on {leave.requestDate}</div>
+                    <td style={{ padding: '16px 12px' }}>
+                      <div style={{ color: '#2563eb', fontWeight: '500' }}>{leave.type}</div>
                     </td>
-                    <td>
-                      <span className={`status-badge ${leave.status.toLowerCase()}`}>{leave.status}</span>
-                      <div className="text-muted">by {leave.approver}</div>
+                    <td style={{ padding: '16px 12px' }}>
+                      <div style={{ color: '#059669', fontWeight: '500' }}>{leave.status}</div>
+                      <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '4px' }}>by {leave.approver}</div>
                     </td>
-                    <td>{leave.requestedBy}</td>
-                    <td>{leave.actionOn}</td>
-                    <td>{leave.note}</td>
-                    <td>
-                      <button className="btn btn-link">View</button>
+                    <td style={{ padding: '16px 12px' }}>{leave.requestedBy}</td>
+                    <td style={{ padding: '16px 12px' }}>{leave.actionOn}</td>
+                    <td style={{ padding: '16px 12px' }}>{leave.note}</td>
+                    <td style={{ padding: '16px 12px' }}>
+                      <button style={{ 
+                        padding: '6px 12px', 
+                        background: '#f3f4f6', 
+                        border: 'none', 
+                        borderRadius: '4px',
+                        color: '#374151',
+                        fontSize: '13px',
+                        cursor: 'pointer'
+                      }}>View</button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="table-footer">
-            <div className="pagination-info">Showing 1-3 of 5 entries</div>
-            <div className="pagination-controls">
-              <button className="btn btn-icon" disabled>‹</button>
-              <button className="btn btn-icon">›</button>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            padding: '16px 0',
+            color: '#6b7280',
+            fontSize: '14px'
+          }}>
+            <div>Showing 1-3 of 3 entries</div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button style={{ 
+                padding: '4px 8px',
+                border: '1px solid #e5e7eb',
+                borderRadius: '4px',
+                background: 'white',
+                cursor: 'pointer',
+                color: '#374151'
+              }}>&lt;</button>
+              <button style={{ 
+                padding: '4px 8px',
+                border: '1px solid #e5e7eb',
+                borderRadius: '4px',
+                background: 'white',
+                cursor: 'pointer',
+                color: '#374151'
+              }}>&gt;</button>
             </div>
           </div>
         </div>
