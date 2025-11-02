@@ -25,7 +25,6 @@ export default function App() {
           </Routes>
         </main>
       </div>
-      <Footer />
       <RequestDrawer open={openDrawer} onClose={()=>setOpenDrawer(false)} />
     </div>
   )
