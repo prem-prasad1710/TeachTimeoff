@@ -1,6 +1,16 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getCurrentUser, logout } from '../utils/auth'
 
 export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
+  const navigate = useNavigate()
+  const user = getCurrentUser()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
+
   return (
     <div className={`topbar ${sidebarOpen ? 'shifted' : ''}`} style={{
       position: 'relative', // Ensure navbar is not fixed or sticky
@@ -95,10 +105,29 @@ export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
         </button>
         <div className="top-user">
           <div style={{textAlign:'right'}}>
-            <div className="name">Kritika Yadav</div>
-            <div style={{fontSize:12,color:'var(--muted)'}}>Admin</div>
+            <div className="name">{user?.name || 'User'}</div>
+            <div style={{fontSize:12,color:'var(--muted)'}}>{user?.role === 'faculty' ? 'Faculty' : user?.role === 'coordinator' ? 'Coordinator' : user?.role === 'chief_coordinator' ? 'Chief Coordinator' : user?.role === 'principal' ? 'Principal' : 'User'}</div>
           </div>
           <img src="https://i.pravatar.cc/100?img=12" alt="avatar" />
+          <button
+            onClick={handleLogout}
+            style={{
+              marginLeft: '12px',
+              padding: '8px 16px',
+              background: '#ef4444',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600',
+              transition: 'transform 0.2s'
+            }}
+            onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+          >
+            Logout
+          </button>
         </div>
       </div>
     </div>
