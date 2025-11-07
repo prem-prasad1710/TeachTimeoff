@@ -1,5 +1,7 @@
-// API Configuration
-const API_URL = 'http://localhost:5000/api'
+// API Configuration - Use environment variable or fallback to localhost
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+
+console.log('🔧 API URL:', API_URL) // Debug log to verify correct URL
 
 // Authentication Service
 export const authenticateUser = async (email, password, role) => {
