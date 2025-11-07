@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar'
 import Footer from './components/Footer'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import AuthCallback from './pages/AuthCallback'
 import FacultyDashboard from './pages/FacultyDashboard'
 import CoordinatorDashboard from './pages/CoordinatorDashboard'
 import ChiefCoordinatorDashboard from './pages/ChiefCoordinatorDashboard'
@@ -45,7 +46,7 @@ export default function App() {
   const [openDrawer, setOpenDrawer] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const location = useLocation()
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup'
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup' || location.pathname === '/auth/callback'
 
   // If not authenticated, redirect to login
   useEffect(() => {
@@ -59,6 +60,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes>
     )
   }

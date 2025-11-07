@@ -108,6 +108,16 @@ export default function Signup() {
     }
   }
 
+  const handleGitHubLogin = () => {
+    // Redirect to GitHub OAuth
+    window.location.href = 'http://localhost:5000/api/auth/github'
+  }
+
+  const handleGoogleLogin = () => {
+    // Redirect to Google OAuth
+    window.location.href = 'http://localhost:5000/api/auth/google'
+  }
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -199,6 +209,65 @@ export default function Signup() {
             fontSize: '14px',
             margin: '0 0 24px 0'
           }}>Fill in your details to get started</p>
+
+          {/* OAuth Buttons */}
+          <button onClick={handleGitHubLogin} type="button" style={{
+            width: '100%',
+            padding: '12px',
+            marginBottom: '12px',
+            background: 'linear-gradient(135deg, #24292e 0%, #000000 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            color: 'white',
+            fontSize: '15px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            transition: 'transform 0.2s'
+          }}
+          onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
+          onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            <span>📱</span> Continue with GitHub
+          </button>
+
+          <button onClick={handleGoogleLogin} type="button" style={{
+            width: '100%',
+            padding: '12px',
+            marginBottom: '20px',
+            background: 'linear-gradient(135deg, #ea4335 0%, #4285f4 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            color: 'white',
+            fontSize: '15px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            transition: 'transform 0.2s'
+          }}
+          onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
+          onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            <span>🔍</span> Continue with Google
+          </button>
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            margin: '20px 0',
+            color: 'rgba(255,255,255,0.5)',
+            fontSize: '14px'
+          }}>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.2)' }}></div>
+            <span style={{ padding: '0 12px' }}>or sign up with email</span>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.2)' }}></div>
+          </div>
 
           {/* Role Selector */}
           <div style={{ marginBottom: '24px' }}>
@@ -625,6 +694,54 @@ export default function Signup() {
               )}
             </button>
           </form>
+
+          {/* OAuth Buttons */}
+          <div style={{ margin: '24px 0', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <button
+              onClick={handleGoogleLogin}
+              style={{
+                padding: '14px',
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '12px',
+                color: 'white',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'background 0.3s, transform 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+              onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.15)'}
+              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+            >
+              <span>🔗</span> Sign up with Google
+            </button>
+            <button
+              onClick={handleGitHubLogin}
+              style={{
+                padding: '14px',
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '12px',
+                color: 'white',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'background 0.3s, transform 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+              onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.15)'}
+              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+            >
+              <span>🐱</span> Sign up with GitHub
+            </button>
+          </div>
 
           <p style={{
             marginTop: '24px',

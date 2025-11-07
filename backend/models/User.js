@@ -29,9 +29,8 @@ const userSchema = new mongoose.Schema({
   },
   department: {
     type: String,
-    required: function() {
-      return this.role === 'faculty' || this.role === 'coordinator'
-    }
+    required: false,
+    trim: true
   },
   employeeId: {
     type: String,
@@ -45,6 +44,21 @@ const userSchema = new mongoose.Schema({
   profileImage: {
     type: String,
     default: null
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+  githubId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+  authProvider: {
+    type: String,
+    enum: ['local', 'google', 'github'],
+    default: 'local'
   },
   leaveBalance: {
     casualLeave: { type: Number, default: 10 },

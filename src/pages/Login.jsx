@@ -50,11 +50,13 @@ export default function Login() {
   }
 
   const handleGitHubLogin = () => {
-    setError('GitHub login not implemented yet')
+    // Redirect to GitHub OAuth
+    window.location.href = 'http://localhost:5000/api/auth/github'
   }
 
   const handleGoogleLogin = () => {
-    setError('Google login not implemented yet')
+    // Redirect to Google OAuth
+    window.location.href = 'http://localhost:5000/api/auth/google'
   }
 
   return (

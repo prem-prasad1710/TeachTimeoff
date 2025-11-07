@@ -89,18 +89,24 @@ router.post('/login', [
     }
 
     const { email, password, role } = req.body
+    
+    console.log('Login attempt:', { email, role, passwordLength: password?.length })
 
     // Find user by email and include password field
     const user = await User.findOne({ email }).select('+password')
     if (!user) {
+      console.log('User not found:', email)
       return res.status(401).json({ 
         success: false, 
         message: 'Invalid email or password' 
       })
     }
+    
+    console.log('User found:', { email: user.email, role: user.role, hasPassword: !!user.password })
 
     // Check if user is active
     if (!user.isActive) {
+      console.log('User is inactive:', email)
       return res.status(403).json({ 
         success: false, 
         message: 'Your account has been deactivated. Please contact administrator.' 
@@ -108,8 +114,12 @@ router.post('/login', [
     }
 
     // Verify password
+    console.log('Comparing passwords...')
     const isPasswordValid = await user.comparePassword(password)
+    console.log('Password valid:', isPasswordValid)
+    
     if (!isPasswordValid) {
+      console.log('Password comparison failed for:', email)
       return res.status(401).json({ 
         success: false, 
         message: 'Invalid email or password' 
