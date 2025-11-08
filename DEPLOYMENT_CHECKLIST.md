@@ -53,8 +53,8 @@ Add ALL these:
 | `JWT_SECRET` | `your_super_secret_jwt_key_change_this_in_production_12345` |
 | `SESSION_SECRET` | `your_random_session_secret_here_change_in_production` |
 | `FRONTEND_URL` | `https://teachtimeoff.vercel.app` |
-| `GOOGLE_CLIENT_ID` | `499749039149-hkoi5nij8b5nlleta6qi7n7c6d2an69e.apps.googleusercontent.com` |
-| `GOOGLE_CLIENT_SECRET` | `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` |
+| `GOOGLE_CLIENT_ID` | `REDACTED_GOOGLE_CLIENT_ID` |
+| `GOOGLE_CLIENT_SECRET` | `REDACTED_GOOGLE_CLIENT_SECRET` |
 | `GOOGLE_CALLBACK_URL` | `https://teachtimeoff-backend.vercel.app/api/auth/google/callback` |
 | `GITHUB_CLIENT_ID` | `Ov23lipWCSU1Noslpi2z` |
 | `GITHUB_CLIENT_SECRET` | `038912411db22817c2b48de7ed5a62f1812428ff` |
