@@ -51,13 +51,13 @@ export default function Login() {
 
   const handleGitHubLogin = () => {
     // Redirect to GitHub OAuth - Use environment variable
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+    const apiUrl = import.meta.env.VITE_API_URL || 'https://teachtimeoff.vercel.app/'
     window.location.href = `${apiUrl}/auth/github`
   }
 
   const handleGoogleLogin = () => {
     // Redirect to Google OAuth - Use environment variable
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+    const apiUrl = import.meta.env.VITE_API_URL || 'https://teachtimeoff.vercel.app/'
     window.location.href = `${apiUrl}/auth/google`
   }
 
