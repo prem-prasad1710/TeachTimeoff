@@ -85,6 +85,30 @@ app.get('/', (req, res) => {
   })
 })
 
+// API root route
+app.get('/api', (req, res) => {
+  res.json({ 
+    message: '✅ TechTimeOff API is running',
+    version: '1.0.0',
+    endpoints: {
+      auth: {
+        register: 'POST /api/auth/register',
+        login: 'POST /api/auth/login',
+        me: 'GET /api/auth/me'
+      },
+      oauth: {
+        github: 'GET /api/auth/github',
+        google: 'GET /api/auth/google'
+      },
+      users: 'GET /api/users',
+      leaves: 'GET /api/leaves',
+      health: 'GET /api/health'
+    },
+    status: 'running',
+    timestamp: new Date().toISOString()
+  })
+})
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
