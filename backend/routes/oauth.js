@@ -16,28 +16,38 @@ router.get('/google',
 // @route   GET /api/auth/google/callback
 // @desc    Google OAuth callback
 // @access  Public
-router.get('/google/callback',
-  passport.authenticate('google', { 
-    failureRedirect: `${process.env.FRONTEND_URL}/login?error=google_auth_failed`,
-    session: false
-  }),
-  (req, res) => {
+router.get('/google/callback', (req, res, next) => {
+  passport.authenticate('google', { session: false }, (err, user, info) => {
+    // Handle authentication errors
+    if (err) {
+      console.error('Google OAuth authentication error:', err)
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_error`)
+    }
+
+    // Handle no user (authentication failed)
+    if (!user) {
+      console.error('Google OAuth: No user returned', info)
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_failed`)
+    }
+
     try {
       // Generate JWT token
       const token = jwt.sign(
-        { userId: req.user._id, role: req.user.role },
+        { userId: user._id, role: user.role },
         process.env.JWT_SECRET,
         { expiresIn: '7d' }
       )
 
+      console.log('✅ Google OAuth successful for user:', user.email)
+      
       // Redirect to frontend with token
       res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}&provider=google`)
     } catch (error) {
-      console.error('Google OAuth error:', error)
-      res.redirect(`${process.env.FRONTEND_URL}/login?error=token_generation_failed`)
+      console.error('Google OAuth token generation error:', error)
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=token_generation_failed`)
     }
-  }
-)
+  })(req, res, next)
+})
 
 // @route   GET /api/auth/github
 // @desc    Initiate GitHub OAuth
@@ -52,27 +62,37 @@ router.get('/github',
 // @route   GET /api/auth/github/callback
 // @desc    GitHub OAuth callback
 // @access  Public
-router.get('/github/callback',
-  passport.authenticate('github', { 
-    failureRedirect: `${process.env.FRONTEND_URL}/login?error=github_auth_failed`,
-    session: false
-  }),
-  (req, res) => {
+router.get('/github/callback', (req, res, next) => {
+  passport.authenticate('github', { session: false }, (err, user, info) => {
+    // Handle authentication errors
+    if (err) {
+      console.error('GitHub OAuth authentication error:', err)
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=github_auth_error`)
+    }
+
+    // Handle no user (authentication failed)
+    if (!user) {
+      console.error('GitHub OAuth: No user returned', info)
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=github_auth_failed`)
+    }
+
     try {
       // Generate JWT token
       const token = jwt.sign(
-        { userId: req.user._id, role: req.user.role },
+        { userId: user._id, role: user.role },
         process.env.JWT_SECRET,
         { expiresIn: '7d' }
       )
 
+      console.log('✅ GitHub OAuth successful for user:', user.email)
+      
       // Redirect to frontend with token
       res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}&provider=github`)
     } catch (error) {
-      console.error('GitHub OAuth error:', error)
-      res.redirect(`${process.env.FRONTEND_URL}/login?error=token_generation_failed`)
+      console.error('GitHub OAuth token generation error:', error)
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=token_generation_failed`)
     }
-  }
-)
+  })(req, res, next)
+})
 
 module.exports = router
