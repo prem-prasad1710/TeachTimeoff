@@ -106,7 +106,7 @@ export default function CoordinatorDashboard(){
               </thead>
               <tbody>
                 {[
-                  { name: 'Kritika Yadav', type: 'Earned Leave', dates: '12 Nov 2025', days: '1' },
+                  { name: user?.fullName || user?.name || 'Faculty Member', type: 'Earned Leave', dates: '12 Nov 2025', days: '1' },
                   { name: 'Aditya Singh', type: 'Sick Leave', dates: '13 Nov 2025', days: '1' },
                   { name: 'Rohit Sharma', type: 'Casual Leave', dates: '15-16 Nov 2025', days: '2' }
                 ].map((req, idx) => (

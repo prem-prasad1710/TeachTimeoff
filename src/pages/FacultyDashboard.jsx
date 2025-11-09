@@ -84,7 +84,7 @@ export default function Dashboard(){
       requestDate: '01 Nov 2025',
       status: 'Approved',
       approver: 'Amit Bora',
-      requestedBy: 'Kritika Yadav',
+      requestedBy: currentUser?.fullName || currentUser?.name || 'User',
       actionOn: '05 Nov 2025',
       note: 'Personal work'
     },

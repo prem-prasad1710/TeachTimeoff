@@ -200,7 +200,7 @@ export default function PrincipalDashboard(){
               <tbody>
                 {[
                   { faculty: 'Dr. Anand Verma', dept: 'Computer Science', type: 'Medical Leave', duration: '10-15 Nov (5 days)', reason: 'Medical emergency' },
-                  { faculty: 'Prof. Kritika Yadav', dept: 'Computer Applications', type: 'Personal Leave', duration: '12 Nov (1 day)', reason: 'Personal work' },
+                  { faculty: user?.fullName || user?.name || 'Faculty Member', dept: user?.department || 'Department', type: 'Personal Leave', duration: '12 Nov (1 day)', reason: 'Personal work' },
                   { faculty: 'Dr. Meera Singh', dept: 'IT', type: 'Conference', duration: '18-20 Nov (3 days)', reason: 'International conference' }
                 ].map((req, idx) => (
                   <tr key={idx} style={{ borderBottom: '1px solid #e5e7eb' }}>
