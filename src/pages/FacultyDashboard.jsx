@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CircleProgress from '../components/CircleProgress'
+import { getCurrentUser } from '../utils/api-auth'
 
 const leaveTypes = [
   { id: 'cl', name: 'Casual Leave', available: 6, used: 4, total: 10, color: '#f59e0b' },
@@ -11,11 +12,31 @@ const leaveTypes = [
 
 export default function Dashboard(){
   const navigate = useNavigate()
-  const [profile, setProfile] = React.useState({ name: 'kritika', email: 'kritika.yadav@jims.edu', department: 'Computer Applications' })
-  const [profileImage, setProfileImage] = React.useState(null)
+  const currentUser = getCurrentUser()
+  
+  // Initialize profile from current user
+  const [profile, setProfile] = React.useState({ 
+    name: currentUser?.fullName || currentUser?.name || 'User', 
+    email: currentUser?.email || '', 
+    department: currentUser?.department || 'Computer Applications' 
+  })
+  const [profileImage, setProfileImage] = React.useState(currentUser?.avatar || null)
   const [selectedType, setSelectedType] = useState('all')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [searchText, setSearchText] = useState('')
+  
+  // Update profile when user changes
+  useEffect(() => {
+    const user = getCurrentUser()
+    if (user) {
+      setProfile({
+        name: user.fullName || user.name || 'User',
+        email: user.email || '',
+        department: user.department || 'Computer Applications'
+      })
+      setProfileImage(user.avatar || null)
+    }
+  }, [])
 
   const [leaveHistory] = useState([
     {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CircleProgress from '../components/CircleProgress'
-import { getCurrentUser } from '../utils/auth'
+import { getCurrentUser } from '../utils/api-auth'
 
 const leaveTypes = [
   { id: 'cl', name: 'Casual Leave', available: 6, used: 4, total: 10, color: '#f59e0b' },

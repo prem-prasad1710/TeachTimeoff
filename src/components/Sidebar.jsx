@@ -1,7 +1,23 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { getCurrentUser } from '../utils/api-auth'
 
 export default function Sidebar({open, onClose}){
+  const user = getCurrentUser()
+  
+  // Get user display info
+  const userName = user?.fullName || user?.name || 'User'
+  const userRole = user?.role || 'faculty'
+  const userEmail = user?.email || ''
+  
+  // Role display mapping
+  const roleDisplay = {
+    'faculty': 'Faculty Member',
+    'coordinator': 'Coordinator',
+    'chief_coordinator': 'Chief Coordinator',
+    'principal': 'Principal'
+  }
+  
   return (
     <aside
       className="sidebar"
@@ -23,10 +39,10 @@ export default function Sidebar({open, onClose}){
       }}
     >
       <div style={{display:'flex',alignItems:'center',gap:10}}>
-        <img src="https://i.pravatar.cc/80?img=12" style={{width:44,height:44,borderRadius:8}}/>
+        <img src={user?.avatar || "https://i.pravatar.cc/80?img=12"} style={{width:44,height:44,borderRadius:8}}/>
         <div>
-          <div style={{fontWeight:700}}>Kritika Yadav</div>
-          <div style={{fontSize:12,opacity:0.85}}>Assistant Professor</div>
+          <div style={{fontWeight:700}}>{userName}</div>
+          <div style={{fontSize:12,opacity:0.85}}>{roleDisplay[userRole]}</div>
         </div>
         {/* Close button for mobile */}
         <button

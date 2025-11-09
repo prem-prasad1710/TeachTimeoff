@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCurrentUser } from '../utils/auth'
+import { getCurrentUser } from '../utils/api-auth'
 
 export default function PrincipalDashboard(){
   const navigate = useNavigate()

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CircleProgress from '../components/CircleProgress'
-import { getCurrentUser } from '../utils/auth'
+import { getCurrentUser } from '../utils/api-auth'
 
 export default function ChiefCoordinatorDashboard(){
   const navigate = useNavigate()

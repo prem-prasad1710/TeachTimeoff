@@ -13,7 +13,7 @@ import PrincipalDashboard from './pages/PrincipalDashboard'
 import Profile from './pages/Profile'
 import RequestDrawer from './components/RequestDrawer2'
 import LeaveBalance from './pages/LeaveBalance'
-import { getCurrentUser, isAuthenticated } from './utils/auth'
+import { getCurrentUser, isAuthenticated } from './utils/api-auth'
 
 // Protected Route wrapper
 function ProtectedRoute({ children, allowedRoles }) {

@@ -50,13 +50,17 @@ export default function Login() {
   }
 
   const handleGitHubLogin = () => {
-    // Redirect to GitHub OAuth
-    window.location.href = 'http://localhost:5000/api/auth/github'
+    // Get backend URL from environment
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+    const backendUrl = API_URL.replace('/api', '')
+    window.location.href = `${backendUrl}/api/auth/github`
   }
 
   const handleGoogleLogin = () => {
-    // Redirect to Google OAuth
-    window.location.href = 'http://localhost:5000/api/auth/google'
+    // Get backend URL from environment
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+    const backendUrl = API_URL.replace('/api', '')
+    window.location.href = `${backendUrl}/api/auth/google`
   }
 
   return (
