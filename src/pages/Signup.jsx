@@ -110,14 +110,16 @@ export default function Signup() {
 
   const handleGitHubLogin = () => {
     // Redirect to GitHub OAuth - Use environment variable
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-    window.location.href = `${apiUrl}/auth/github`
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+    const backendUrl = API_URL.replace('/api', '') // Remove /api suffix if present
+    window.location.href = `${backendUrl}/api/auth/github`
   }
 
   const handleGoogleLogin = () => {
     // Redirect to Google OAuth - Use environment variable
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-    window.location.href = `${apiUrl}/auth/google`
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+    const backendUrl = API_URL.replace('/api', '') // Remove /api suffix if present
+    window.location.href = `${backendUrl}/api/auth/google`
   }
 
   return (

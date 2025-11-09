@@ -16,18 +16,23 @@ router.get('/google',
 // @route   GET /api/auth/google/callback
 // @desc    Google OAuth callback
 // @access  Public
+
 router.get('/google/callback', (req, res, next) => {
   passport.authenticate('google', { session: false }, (err, user, info) => {
     // Handle authentication errors
     if (err) {
-      console.error('Google OAuth authentication error:', err)
-      return res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_error`)
+      console.error('❌ Google OAuth authentication error:')
+      console.error('Error details:', JSON.stringify(err, null, 2))
+      console.error('Error message:', err.message)
+      console.error('Error stack:', err.stack)
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_error&message=${encodeURIComponent(err.message || 'Unknown error')}`)
     }
 
     // Handle no user (authentication failed)
     if (!user) {
-      console.error('Google OAuth: No user returned', info)
-      return res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_failed`)
+      console.error('❌ Google OAuth: No user returned')
+      console.error('Info details:', JSON.stringify(info, null, 2))
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=google_auth_failed&message=${encodeURIComponent(info?.message || 'No user')}`)
     }
 
     try {
@@ -66,14 +71,18 @@ router.get('/github/callback', (req, res, next) => {
   passport.authenticate('github', { session: false }, (err, user, info) => {
     // Handle authentication errors
     if (err) {
-      console.error('GitHub OAuth authentication error:', err)
-      return res.redirect(`${process.env.FRONTEND_URL}/login?error=github_auth_error`)
+      console.error('❌ GitHub OAuth authentication error:')
+      console.error('Error details:', JSON.stringify(err, null, 2))
+      console.error('Error message:', err.message)
+      console.error('Error stack:', err.stack)
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=github_auth_error&message=${encodeURIComponent(err.message || 'Unknown error')}`)
     }
 
     // Handle no user (authentication failed)
     if (!user) {
-      console.error('GitHub OAuth: No user returned', info)
-      return res.redirect(`${process.env.FRONTEND_URL}/login?error=github_auth_failed`)
+      console.error('❌ GitHub OAuth: No user returned')
+      console.error('Info details:', JSON.stringify(info, null, 2))
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=github_auth_failed&message=${encodeURIComponent(info?.message || 'No user')}`)
     }
 
     try {
