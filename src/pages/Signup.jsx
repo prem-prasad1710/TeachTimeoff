@@ -743,7 +743,7 @@ export default function Signup() {
               onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.15)'}
               onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
             >
-              <span>🐱</span> Sign up with GitHub
+              <span>🫆</span> Sign up with GitHub
             </button>
           </div>
 

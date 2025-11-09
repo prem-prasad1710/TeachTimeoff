@@ -50,17 +50,13 @@ export default function Login() {
   }
 
   const handleGitHubLogin = () => {
-    // Redirect to GitHub OAuth - Use environment variable
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-    const backendUrl = API_URL.replace('/api', '') // Remove /api suffix if present
-    window.location.href = `${backendUrl}/api/auth/github`
+    // Redirect to GitHub OAuth
+    window.location.href = 'http://localhost:5000/api/auth/github'
   }
 
   const handleGoogleLogin = () => {
-    // Redirect to Google OAuth - Use environment variable
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-    const backendUrl = API_URL.replace('/api', '') // Remove /api suffix if present
-    window.location.href = `${backendUrl}/api/auth/google`
+    // Redirect to Google OAuth
+    window.location.href = 'http://localhost:5000/api/auth/google'
   }
 
   return (
@@ -436,7 +432,7 @@ export default function Login() {
             color: 'rgba(255,255,255,0.7)',
             fontSize: '14px'
           }}>
-            Don't have an account? <a href="/signup" style={{ color: '#a78bfa', textDecoration: 'none', fontWeight: '600' }}>Sign up</a>
+            Don't have an account? <a href="#" style={{ color: '#a78bfa', textDecoration: 'none', fontWeight: '600' }}>Sign up</a>
           </p>
         </div>
 
