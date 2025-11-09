@@ -17,10 +17,11 @@ export const authenticateUser = async (email, password, role) => {
     const data = await response.json()
 
     if (data.success) {
-      // Store token and user data
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('currentUser', JSON.stringify(data.user))
-      return data.user
+      // Return both token and user data (DO NOT store user in localStorage)
+      return {
+        token: data.token,
+        user: data.user
+      }
     } else {
       throw new Error(data.message || 'Authentication failed')
     }
@@ -44,9 +45,11 @@ export const registerUser = async (userData) => {
     const data = await response.json()
 
     if (data.success) {
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('currentUser', JSON.stringify(data.user))
-      return data.user
+      // Return both token and user data (DO NOT store user in localStorage)
+      return {
+        token: data.token,
+        user: data.user
+      }
     } else {
       throw new Error(data.message || 'Registration failed')
     }
@@ -56,7 +59,7 @@ export const registerUser = async (userData) => {
   }
 }
 
-// Get current user from API
+// Get current user from API (always fetch from database, never localStorage)
 export const fetchCurrentUser = async () => {
   try {
     const token = localStorage.getItem('token')
@@ -71,53 +74,29 @@ export const fetchCurrentUser = async () => {
     const data = await response.json()
 
     if (data.success) {
-      localStorage.setItem('currentUser', JSON.stringify(data.user))
+      // Return user data from database
       return data.user
     } else {
       // Token is invalid, clear storage
-      logout()
+      localStorage.removeItem('token')
       return null
     }
   } catch (error) {
     console.error('Fetch user error:', error)
-    logout()
+    localStorage.removeItem('token')
     return null
   }
-}
-
-// Get current user from localStorage
-export const getCurrentUser = () => {
-  try {
-    const userStr = localStorage.getItem('currentUser')
-    return userStr ? JSON.parse(userStr) : null
-  } catch (error) {
-    console.error('Error getting current user:', error)
-    return null
-  }
-}
-
-// Set current user
-export const setCurrentUser = (user) => {
-  localStorage.setItem('currentUser', JSON.stringify(user))
 }
 
 // Logout
 export const logout = () => {
   localStorage.removeItem('token')
-  localStorage.removeItem('currentUser')
 }
 
 // Check if authenticated
 export const isAuthenticated = () => {
   const token = localStorage.getItem('token')
-  const user = getCurrentUser()
-  return !!token && !!user
-}
-
-// Get user role
-export const getUserRole = () => {
-  const user = getCurrentUser()
-  return user ? user.role : null
+  return !!token
 }
 
 // Get auth token

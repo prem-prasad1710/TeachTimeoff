@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CircleProgress from '../components/CircleProgress'
-import { getCurrentUser } from '../utils/api-auth'
+import { useAuth } from '../contexts/AuthContext'
 
 const leaveTypes = [
   { id: 'cl', name: 'Casual Leave', available: 6, used: 4, total: 10, color: '#f59e0b' },
@@ -12,8 +12,8 @@ const leaveTypes = [
 
 export default function CoordinatorDashboard(){
   const navigate = useNavigate()
-  const [user, setUser] = useState(null)
-  const [profileImage, setProfileImage] = React.useState(null)
+  const { user, isAuthenticated } = useAuth()
+  const [profileImage, setProfileImage] = React.useState(user?.avatar || user?.profileImage || null)
   
   // Sample team data for coordinator
   const [teamStats] = useState({
@@ -23,29 +23,24 @@ export default function CoordinatorDashboard(){
   })
 
   React.useEffect(() => {
-    const currentUser = getCurrentUser()
-    if (!currentUser || currentUser.role !== 'coordinator') {
+    if (!isAuthenticated || user?.role !== 'coordinator') {
       navigate('/login')
       return
     }
-    setUser(currentUser)
-    
-    try {
-      const img = localStorage.getItem('profileImage')
-      if (img) setProfileImage(img)
-    } catch (err) {
-      // ignore
-    }
-  }, [navigate])
+  }, [navigate, isAuthenticated, user])
 
   if (!user) return null
+
+  // Get user's first name - handle both fullName and name fields
+  const userName = user.name || user.fullName || 'User'
+  const firstName = userName.split(' ')[0]
 
   return (
     <div className="dashboard-layout" style={{ background: '#f7f7f7', minHeight: '100vh', padding: '32px' }}>
       {/* Welcome Header */}
       <div className="page-title" style={{ marginBottom: 32 }}>
         <div>
-          <h2 style={{margin:0}}>Welcome, {user.name.split(' ')[0]}</h2>
+          <h2 style={{margin:0}}>Welcome, {firstName}</h2>
           <div style={{color:'var(--muted)'}}>Coordinator Dashboard</div>
         </div>
       </div>

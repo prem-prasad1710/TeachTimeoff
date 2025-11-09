@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { registerUser, setCurrentUser } from '../utils/api-auth'
+import { registerUser } from '../utils/api-auth'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Signup() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [selectedRole, setSelectedRole] = useState('faculty')
   const [formData, setFormData] = useState({
     name: '',
@@ -79,9 +81,10 @@ export default function Signup() {
         phoneNumber: formData.phoneNumber.trim() || undefined
       }
 
-      const user = await registerUser(userData)
+      const { token, user } = await registerUser(userData)
       
-      setCurrentUser(user)
+      // Use AuthContext to manage user state (not localStorage)
+      await login(user, token)
       
       // Navigate based on role
       switch(user.role) {

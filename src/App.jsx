@@ -13,13 +13,17 @@ import PrincipalDashboard from './pages/PrincipalDashboard'
 import Profile from './pages/Profile'
 import RequestDrawer from './components/RequestDrawer2'
 import LeaveBalance from './pages/LeaveBalance'
-import { getCurrentUser, isAuthenticated } from './utils/api-auth'
+import { useAuth } from './contexts/AuthContext'
 
 // Protected Route wrapper
 function ProtectedRoute({ children, allowedRoles }) {
-  const user = getCurrentUser()
+  const { user, isAuthenticated, loading } = useAuth()
   
-  if (!isAuthenticated()) {
+  if (loading) {
+    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>Loading...</div>
+  }
+  
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />
   }
   
@@ -46,14 +50,8 @@ export default function App() {
   const [openDrawer, setOpenDrawer] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const location = useLocation()
+  const { isAuthenticated } = useAuth()
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signup' || location.pathname === '/auth/callback'
-
-  // If not authenticated, redirect to login
-  useEffect(() => {
-    if (!isAuthenticated() && !isAuthPage) {
-      // Will be handled by ProtectedRoute
-    }
-  }, [location, isAuthPage])
 
   if (isAuthPage) {
     return (

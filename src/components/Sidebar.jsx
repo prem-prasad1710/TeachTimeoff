@@ -1,12 +1,12 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { getCurrentUser } from '../utils/api-auth'
+import React, { useState, useEffect } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Sidebar({open, onClose}){
-  const user = getCurrentUser()
+  const { user } = useAuth()
   
-  // Get user display info
-  const userName = user?.fullName || user?.name || 'User'
+  // Get user display info from AuthContext (MongoDB data)
+  const userName = user?.name || user?.fullName || 'User'
   const userRole = user?.role || 'faculty'
   const userEmail = user?.email || ''
   

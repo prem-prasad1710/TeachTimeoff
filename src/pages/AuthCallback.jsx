@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { setCurrentUser } from '../utils/api-auth'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function AuthCallback() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const { login } = useAuth()
 
   useEffect(() => {
     const handleOAuthCallback = async () => {
@@ -38,7 +39,8 @@ export default function AuthCallback() {
         const data = await response.json()
 
         if (data.success && data.user) {
-          setCurrentUser(data.user)
+          // Use AuthContext to manage user state
+          await login(data.user, token)
 
           // Navigate based on role
           switch(data.user.role) {

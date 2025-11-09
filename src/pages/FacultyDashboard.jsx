@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CircleProgress from '../components/CircleProgress'
-import { getCurrentUser } from '../utils/api-auth'
+import { useAuth } from '../contexts/AuthContext'
 
 const leaveTypes = [
   { id: 'cl', name: 'Casual Leave', available: 6, used: 4, total: 10, color: '#f59e0b' },
@@ -12,31 +12,19 @@ const leaveTypes = [
 
 export default function Dashboard(){
   const navigate = useNavigate()
-  const currentUser = getCurrentUser()
+  const { user } = useAuth()
   
-  // Initialize profile from current user
-  const [profile, setProfile] = React.useState({ 
-    name: currentUser?.fullName || currentUser?.name || 'User', 
-    email: currentUser?.email || '', 
-    department: currentUser?.department || 'Computer Applications' 
-  })
-  const [profileImage, setProfileImage] = React.useState(currentUser?.avatar || null)
+  // Get user data from AuthContext (MongoDB)
+  const profile = {
+    name: user?.name || user?.fullName || 'User',
+    email: user?.email || '',
+    department: user?.department || 'Computer Applications',
+    role: user?.role || 'faculty'
+  }
+  const [profileImage, setProfileImage] = useState(user?.avatar || user?.profileImage || null)
   const [selectedType, setSelectedType] = useState('all')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [searchText, setSearchText] = useState('')
-  
-  // Update profile when user changes
-  useEffect(() => {
-    const user = getCurrentUser()
-    if (user) {
-      setProfile({
-        name: user.fullName || user.name || 'User',
-        email: user.email || '',
-        department: user.department || 'Computer Applications'
-      })
-      setProfileImage(user.avatar || null)
-    }
-  }, [])
 
   const [leaveHistory] = useState([
     {
@@ -74,8 +62,7 @@ export default function Dashboard(){
       requestedBy: 'Himanshu Gola',
       actionOn: '29 Sep 2025',
       note: 'Not well today'
-    }
-    ,
+    },
     {
       id: 4,
       dates: '12 Nov 2025',
@@ -84,7 +71,7 @@ export default function Dashboard(){
       requestDate: '01 Nov 2025',
       status: 'Approved',
       approver: 'Amit Bora',
-      requestedBy: currentUser?.fullName || currentUser?.name || 'User',
+      requestedBy: user?.name || user?.fullName || 'User',
       actionOn: '05 Nov 2025',
       note: 'Personal work'
     },
@@ -138,16 +125,8 @@ export default function Dashboard(){
     }
   ])
 
-  React.useEffect(() => {
-    try {
-      const raw = localStorage.getItem('profileUser')
-      if (raw) setProfile(JSON.parse(raw))
-      const img = localStorage.getItem('profileImage')
-      if (img) setProfileImage(img)
-    } catch (err) {
-      // ignore
-    }
-  }, [])
+  // Don't override profile with old cached data from localStorage
+  // The profile is already set correctly from currentUser above
 
   // filteredLeaves is derived from leaveHistory + filters
   const [filteredLeaves, setFilteredLeaves] = useState(leaveHistory)

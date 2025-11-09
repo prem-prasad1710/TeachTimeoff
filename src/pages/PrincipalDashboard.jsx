@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCurrentUser } from '../utils/api-auth'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function PrincipalDashboard(){
   const navigate = useNavigate()
-  const [user, setUser] = useState(null)
+  const { user, isAuthenticated } = useAuth()
   
   const [institutionStats] = useState({
     totalFaculty: 45,
@@ -18,22 +18,24 @@ export default function PrincipalDashboard(){
   })
 
   React.useEffect(() => {
-    const currentUser = getCurrentUser()
-    if (!currentUser || currentUser.role !== 'principal') {
+    if (!isAuthenticated || user?.role !== 'principal') {
       navigate('/login')
       return
     }
-    setUser(currentUser)
-  }, [navigate])
+  }, [navigate, isAuthenticated, user])
 
   if (!user) return null
+
+  // Get user's first name - handle both fullName and name fields
+  const userName = user.name || user.fullName || 'User'
+  const firstName = userName.split(' ')[0]
 
   return (
     <div className="dashboard-layout" style={{ background: '#f7f7f7', minHeight: '100vh', padding: '32px' }}>
       {/* Welcome Header */}
       <div className="page-title" style={{ marginBottom: 32 }}>
         <div>
-          <h2 style={{margin:0, fontSize: '32px', fontWeight: '700'}}>Welcome, {user.name.split(' ')[0]}</h2>
+          <h2 style={{margin:0, fontSize: '32px', fontWeight: '700'}}>Welcome, {firstName}</h2>
           <div style={{color:'var(--muted)', fontSize: '16px'}}>Principal Dashboard - Institution Overview</div>
         </div>
       </div>

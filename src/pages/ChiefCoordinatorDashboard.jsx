@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CircleProgress from '../components/CircleProgress'
-import { getCurrentUser } from '../utils/api-auth'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function ChiefCoordinatorDashboard(){
   const navigate = useNavigate()
-  const [user, setUser] = useState(null)
+  const { user, isAuthenticated } = useAuth()
   
   const [stats] = useState({
     totalDepartments: 5,
@@ -16,22 +16,24 @@ export default function ChiefCoordinatorDashboard(){
   })
 
   React.useEffect(() => {
-    const currentUser = getCurrentUser()
-    if (!currentUser || currentUser.role !== 'chief_coordinator') {
+    if (!isAuthenticated || user?.role !== 'chief_coordinator') {
       navigate('/login')
       return
     }
-    setUser(currentUser)
-  }, [navigate])
+  }, [navigate, isAuthenticated, user])
 
   if (!user) return null
+
+  // Get user's first name - handle both fullName and name fields
+  const userName = user.name || user.fullName || 'User'
+  const firstName = userName.split(' ')[0]
 
   return (
     <div className="dashboard-layout" style={{ background: '#f7f7f7', minHeight: '100vh', padding: '32px' }}>
       {/* Welcome Header */}
       <div className="page-title" style={{ marginBottom: 32 }}>
         <div>
-          <h2 style={{margin:0}}>Welcome, {user.name.split(' ')[0]}</h2>
+          <h2 style={{margin:0}}>Welcome, {firstName}</h2>
           <div style={{color:'var(--muted)'}}>Chief Coordinator Dashboard</div>
         </div>
       </div>

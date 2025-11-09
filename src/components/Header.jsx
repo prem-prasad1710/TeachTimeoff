@@ -1,13 +1,13 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getCurrentUser, logout } from '../utils/api-auth'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
   const navigate = useNavigate()
-  const user = getCurrentUser()
+  const { user, logout: authLogout } = useAuth()
 
   const handleLogout = () => {
-    logout()
+    authLogout()
     navigate('/login')
   }
 
@@ -105,7 +105,7 @@ export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
         </button>
         <div className="top-user">
           <div style={{textAlign:'right'}}>
-            <div className="name">{user?.name || 'User'}</div>
+            <div className="name">{user?.name || user?.fullName || 'User'}</div>
             <div style={{fontSize:12,color:'var(--muted)'}}>{user?.role === 'faculty' ? 'Faculty' : user?.role === 'coordinator' ? 'Coordinator' : user?.role === 'chief_coordinator' ? 'Chief Coordinator' : user?.role === 'principal' ? 'Principal' : 'User'}</div>
           </div>
           <img src="https://i.pravatar.cc/100?img=12" alt="avatar" />

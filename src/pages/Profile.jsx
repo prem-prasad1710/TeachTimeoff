@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { getCurrentUser, updateUserProfile, fetchCurrentUser } from '../utils/api-auth'
+import { updateUserProfile, fetchCurrentUser } from '../utils/api-auth'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Profile() {
   const fileInputRef = useRef(null)
-  const [profileImage, setProfileImage] = useState(null)
+  const { user: authUser, refreshUser } = useAuth()
+  const [profileImage, setProfileImage] = useState(authUser?.profileImage || null)
   const [editMode, setEditMode] = useState({})
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -37,9 +39,8 @@ export default function Profile() {
   const loadUserData = async () => {
     try {
       setLoading(true)
-      const currentUser = getCurrentUser()
       
-      if (currentUser) {
+      if (authUser) {
         // Fetch latest data from API
         const userData = await fetchCurrentUser()
         
@@ -60,10 +61,6 @@ export default function Profile() {
           // Load profile image
           if (userData.profileImage) {
             setProfileImage(userData.profileImage)
-          } else {
-            // Check localStorage for backward compatibility
-            const savedImage = localStorage.getItem('profileImage')
-            if (savedImage) setProfileImage(savedImage)
           }
         }
       }
@@ -102,53 +99,33 @@ export default function Profile() {
     if (!file) return
     
     const reader = new FileReader()
-    reader.onloadend = async () => {
+    reader.onload = () => {
       const img = new Image()
-      img.onload = async () => {
-        const MAX_WIDTH = 800
-        const MAX_HEIGHT = 800
-        let { width, height } = img
-        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
-          const ratio = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height)
-          width = Math.round(width * ratio)
-          height = Math.round(height * ratio)
-        }
+      img.onload = () => {
         const canvas = document.createElement('canvas')
+        let width = img.width
+        let height = img.height
+        const maxDim = 400
+        if (width > height && width > maxDim) {
+          height = (height * maxDim) / width
+          width = maxDim
+        } else if (height > maxDim) {
+          width = (width * maxDim) / height
+          height = maxDim
+        }
         canvas.width = width
         canvas.height = height
         const ctx = canvas.getContext('2d')
         ctx.drawImage(img, 0, 0, width, height)
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.8)
-        
-        // Save to state and localStorage immediately for UI feedback
-        setProfileImage(dataUrl)
-        try {
-          localStorage.setItem('profileImage', dataUrl)
-        } catch (err) {
-          console.error('localStorage error:', err)
-        }
+        const compressed = canvas.toDataURL('image/jpeg', 0.8)
+        setProfileImage(compressed)
         
         // Save to database
-        try {
-          const currentUser = getCurrentUser()
-          if (currentUser && currentUser.id) {
-            setSaving(true)
-            await updateUserProfile(currentUser.id, { profileImage: dataUrl })
-            showMessage('success', 'Profile image updated successfully!')
-          }
-        } catch (error) {
-          console.error('Error saving image:', error)
-          showMessage('error', 'Failed to save profile image')
-        } finally {
-          setSaving(false)
+        if (authUser && authUser.id) {
+          updateUserProfile(authUser.id, { profileImage: compressed })
+            .then(() => refreshUser()) // Refresh user data in AuthContext
+            .catch(err => console.error('Failed to save profile image:', err))
         }
-      }
-      img.onerror = () => {
-        // fallback: store raw result
-        try {
-          setProfileImage(reader.result)
-          localStorage.setItem('profileImage', reader.result)
-        } catch (err) {}
       }
       img.src = reader.result
     }
@@ -158,13 +135,11 @@ export default function Profile() {
   const removeProfileImage = async () => {
     setProfileImage(null)
     try { 
-      localStorage.removeItem('profileImage') 
-      
       // Remove from database
-      const currentUser = getCurrentUser()
-      if (currentUser && currentUser.id) {
+      if (authUser && authUser.id) {
         setSaving(true)
-        await updateUserProfile(currentUser.id, { profileImage: null })
+        await updateUserProfile(authUser.id, { profileImage: null })
+        await refreshUser() // Refresh user data in AuthContext
         showMessage('success', 'Profile image removed')
       }
     } catch (err) {
@@ -186,17 +161,10 @@ export default function Profile() {
       setSaving(true)
       
       // Update local state immediately for UI responsiveness
-      setUser((prev) => {
-        const next = { ...prev, [field]: value }
-        try {
-          localStorage.setItem('profileUser', JSON.stringify(next))
-        } catch (err) {}
-        return next
-      })
+      setUser((prev) => ({ ...prev, [field]: value }))
       
       // Save to database
-      const currentUser = getCurrentUser()
-      if (currentUser && currentUser.id) {
+      if (authUser && authUser.id) {
         // Map field names to API field names
         const apiFieldMap = {
           name: 'name',
@@ -209,7 +177,8 @@ export default function Profile() {
         }
         
         const apiField = apiFieldMap[field] || field
-        await updateUserProfile(currentUser.id, { [apiField]: value })
+        await updateUserProfile(authUser.id, { [apiField]: value })
+        await refreshUser() // Refresh user data in AuthContext
         showMessage('success', `${field.charAt(0).toUpperCase() + field.slice(1)} updated successfully!`)
       }
       
@@ -222,12 +191,7 @@ export default function Profile() {
     }
   }
 
-  // persist user on change (catch-all)
-  useEffect(() => {
-    try {
-      localStorage.setItem('profileUser', JSON.stringify(user))
-    } catch (err) {}
-  }, [user])
+  // Remove localStorage persistence - use database only
 
   const EditableField = ({ label, value, field }) => {
     const inputRef = useRef(null)

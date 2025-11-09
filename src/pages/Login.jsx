@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { authenticateUser, setCurrentUser } from '../utils/api-auth'
+import { authenticateUser } from '../utils/api-auth'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Login() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [selectedRole, setSelectedRole] = useState('faculty')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -23,9 +25,10 @@ export default function Login() {
     setError('')
 
     try {
-      const user = await authenticateUser(email, password, selectedRole)
+      const { token, user } = await authenticateUser(email, password, selectedRole)
       
-      setCurrentUser(user)
+      // Use AuthContext to manage user state (not localStorage)
+      await login(user, token)
       
       // Navigate based on role
       switch(user.role) {
