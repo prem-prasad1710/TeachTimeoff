@@ -439,7 +439,7 @@ export default function Login() {
             color: 'rgba(255,255,255,0.7)',
             fontSize: '14px'
           }}>
-            Don't have an account? <a href="#" style={{ color: '#a78bfa', textDecoration: 'none', fontWeight: '600' }}>Sign up</a>
+            Don't have an account? <a href="/signup" style={{ color: '#a78bfa', textDecoration: 'none', fontWeight: '600' }}>Sign up</a>
           </p>
         </div>
 
