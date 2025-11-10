@@ -144,11 +144,8 @@ export const updateUserProfile = async (userId, profileData) => {
     })
     
     if (response.success) {
-      // Update localStorage with new user data
-      const currentUser = getCurrentUser()
-      const updatedUser = { ...currentUser, ...response.user }
-      setCurrentUser(updatedUser)
-      return updatedUser
+      // Return updated user data (AuthContext will handle state update)
+      return response.user
     }
     throw new Error(response.message || 'Profile update failed')
   } catch (error) {

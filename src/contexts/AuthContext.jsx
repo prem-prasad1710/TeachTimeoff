@@ -16,16 +16,34 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [token, setToken] = useState(localStorage.getItem('token'))
   
-  // Clean up old localStorage keys on mount (one-time cleanup)
+  // Aggressive cleanup function
+  const cleanupOldLocalStorage = () => {
+    const keysToRemove = ['currentUser', 'profileUser']
+    let cleaned = false
+    
+    keysToRemove.forEach(key => {
+      if (localStorage.getItem(key)) {
+        localStorage.removeItem(key)
+        cleaned = true
+        console.log(`🧹 Removed old ${key} from localStorage`)
+      }
+    })
+    
+    return cleaned
+  }
+  
+  // Clean up old localStorage keys on mount and set up periodic cleanup
   useEffect(() => {
-    if (localStorage.getItem('currentUser')) {
-      localStorage.removeItem('currentUser')
-      console.log('🧹 AuthContext: Removed old currentUser from localStorage')
-    }
-    if (localStorage.getItem('profileUser')) {
-      localStorage.removeItem('profileUser')
-      console.log('🧹 AuthContext: Removed old profileUser from localStorage')
-    }
+    // Initial cleanup
+    cleanupOldLocalStorage()
+    
+    // Set up periodic cleanup every 2 seconds to catch any rogue writes
+    const intervalId = setInterval(() => {
+      cleanupOldLocalStorage()
+    }, 2000)
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId)
   }, [])
 
   // Load user from API when token exists
