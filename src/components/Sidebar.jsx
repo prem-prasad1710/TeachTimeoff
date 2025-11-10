@@ -5,10 +5,12 @@ import { useAuth } from '../contexts/AuthContext'
 export default function Sidebar({open, onClose}){
   const { user } = useAuth()
   
-  // Get user display info from AuthContext (MongoDB data)
-  const userName = user?.name || user?.fullName || 'User'
-  const userRole = user?.role || 'faculty'
-  const userEmail = user?.email || ''
+   const profile = {
+    name: user?.name || user?.fullName || 'User',
+    email: user?.email || '',
+    department: user?.department || 'Computer Applications',
+    role: user?.role || 'faculty'
+  }
   
   // Role display mapping
   const roleDisplay = {
@@ -39,10 +41,10 @@ export default function Sidebar({open, onClose}){
       }}
     >
       <div style={{display:'flex',alignItems:'center',gap:10}}>
-        <img src={user?.avatar || "https://i.pravatar.cc/80?img=12"} style={{width:44,height:44,borderRadius:8}}/>
+          <img src={profileImage || profile.avatar || "https://i.pravatar.cc/150?img=12"} alt="Profile" style={{width:44,height:44,borderRadius:8}}/>
         <div>
-          <div style={{fontWeight:700}}>{userName}</div>
-          <div style={{fontSize:12,opacity:0.85}}>{roleDisplay[userRole]}</div>
+          <div style={{fontWeight:700}}>{profile.name}</div>
+          <div style={{fontSize:12,opacity:0.85}}>{roleDisplay[profile.role]}</div>
         </div>
         {/* Close button for mobile */}
         <button
