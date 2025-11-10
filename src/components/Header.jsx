@@ -10,6 +10,18 @@ export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
     authLogout()
     navigate('/login')
   }
+  
+  // Clean up old localStorage keys on mount (one-time cleanup)
+  useEffect(() => {
+    if (localStorage.getItem('currentUser')) {
+      localStorage.removeItem('currentUser')
+      console.log('🧹 Cleaned up old currentUser from localStorage')
+    }
+    if (localStorage.getItem('profileUser')) {
+      localStorage.removeItem('profileUser')
+      console.log('🧹 Cleaned up old profileUser from localStorage')
+    }
+  }, [])
 
   return (
     <div className={`topbar ${sidebarOpen ? 'shifted' : ''}`} style={{

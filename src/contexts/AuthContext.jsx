@@ -15,6 +15,18 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [token, setToken] = useState(localStorage.getItem('token'))
+  
+  // Clean up old localStorage keys on mount (one-time cleanup)
+  useEffect(() => {
+    if (localStorage.getItem('currentUser')) {
+      localStorage.removeItem('currentUser')
+      console.log('🧹 AuthContext: Removed old currentUser from localStorage')
+    }
+    if (localStorage.getItem('profileUser')) {
+      localStorage.removeItem('profileUser')
+      console.log('🧹 AuthContext: Removed old profileUser from localStorage')
+    }
+  }, [])
 
   // Load user from API when token exists
   useEffect(() => {
@@ -24,6 +36,7 @@ export const AuthProvider = ({ children }) => {
           const userData = await fetchCurrentUser()
           if (userData) {
             setUser(userData)
+            console.log('✅ User loaded from MongoDB:', userData.name || userData.fullName)
           } else {
             // Token is invalid, clear it
             setToken(null)

@@ -13,7 +13,6 @@ const leaveTypes = [
 export default function CoordinatorDashboard(){
   const navigate = useNavigate()
   const { user, isAuthenticated } = useAuth()
-  const [profileImage, setProfileImage] = React.useState(user?.avatar || user?.profileImage || null)
   
   // Sample team data for coordinator
   const [teamStats] = useState({
@@ -21,6 +20,16 @@ export default function CoordinatorDashboard(){
     onLeave: 3,
     pendingRequests: 5
   })
+  
+  // Clean up old localStorage keys on mount
+  React.useEffect(() => {
+    if (localStorage.getItem('currentUser')) {
+      localStorage.removeItem('currentUser')
+    }
+    if (localStorage.getItem('profileUser')) {
+      localStorage.removeItem('profileUser')
+    }
+  }, [])
 
   React.useEffect(() => {
     if (!isAuthenticated || user?.role !== 'coordinator') {

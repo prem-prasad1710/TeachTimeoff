@@ -14,17 +14,30 @@ export default function Dashboard(){
   const navigate = useNavigate()
   const { user } = useAuth()
   
-  // Get user data from AuthContext (MongoDB)
+  // Get user data from AuthContext (MongoDB) - derive directly, no local state
   const profile = {
     name: user?.name || user?.fullName || 'User',
     email: user?.email || '',
     department: user?.department || 'Computer Applications',
-    role: user?.role || 'faculty'
+    role: user?.role || 'faculty',
+    profileImage: user?.avatar || user?.profileImage || null
   }
-  const [profileImage, setProfileImage] = useState(user?.avatar || user?.profileImage || null)
+  
   const [selectedType, setSelectedType] = useState('all')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [searchText, setSearchText] = useState('')
+  
+  // Clean up old localStorage keys on mount (one-time cleanup)
+  useEffect(() => {
+    if (localStorage.getItem('currentUser')) {
+      localStorage.removeItem('currentUser')
+      console.log('🧹 Cleaned up old currentUser from localStorage')
+    }
+    if (localStorage.getItem('profileUser')) {
+      localStorage.removeItem('profileUser')
+      console.log('🧹 Cleaned up old profileUser from localStorage')
+    }
+  }, [])
 
   const [leaveHistory] = useState([
     {

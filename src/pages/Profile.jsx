@@ -33,6 +33,14 @@ export default function Profile() {
 
   // Load user data from API on component mount
   useEffect(() => {
+    // Clean up old localStorage keys
+    if (localStorage.getItem('currentUser')) {
+      localStorage.removeItem('currentUser')
+    }
+    if (localStorage.getItem('profileUser')) {
+      localStorage.removeItem('profileUser')
+    }
+    
     loadUserData()
   }, [])
 

@@ -5,11 +5,13 @@ import { useAuth } from '../contexts/AuthContext'
 export default function Sidebar({open, onClose}){
   const { user } = useAuth()
   
-   const profile = {
+  // Derive profile data directly from user (no local state for user data)
+  const profile = {
     name: user?.name || user?.fullName || 'User',
     email: user?.email || '',
     department: user?.department || 'Computer Applications',
-    role: user?.role || 'faculty'
+    role: user?.role || 'faculty',
+    profileImage: user?.avatar || user?.profileImage || null
   }
   
   // Role display mapping
@@ -19,6 +21,19 @@ export default function Sidebar({open, onClose}){
     'chief_coordinator': 'Chief Coordinator',
     'principal': 'Principal'
   }
+  
+  // Clean up old localStorage keys on mount (one-time cleanup)
+  useEffect(() => {
+    // Remove old authentication data if it exists
+    if (localStorage.getItem('currentUser')) {
+      localStorage.removeItem('currentUser')
+      console.log('🧹 Cleaned up old currentUser from localStorage')
+    }
+    if (localStorage.getItem('profileUser')) {
+      localStorage.removeItem('profileUser')
+      console.log('🧹 Cleaned up old profileUser from localStorage')
+    }
+  }, [])
   
   return (
     <aside
@@ -41,7 +56,7 @@ export default function Sidebar({open, onClose}){
       }}
     >
       <div style={{display:'flex',alignItems:'center',gap:10}}>
-          <img src={profileImage || profile.avatar || "https://i.pravatar.cc/150?img=12"} alt="Profile" style={{width:44,height:44,borderRadius:8}}/>
+          <img src={profile.profileImage || "https://i.pravatar.cc/150?img=12"} alt="Profile" style={{width:44,height:44,borderRadius:8}}/>
         <div>
           <div style={{fontWeight:700}}>{profile.name}</div>
           <div style={{fontSize:12,opacity:0.85}}>{roleDisplay[profile.role]}</div>

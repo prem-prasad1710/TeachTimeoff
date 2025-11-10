@@ -16,6 +16,16 @@ export default function PrincipalDashboard(){
     rejectedThisMonth: 2,
     averageLeavePerFaculty: 12.5
   })
+  
+  // Clean up old localStorage keys on mount
+  React.useEffect(() => {
+    if (localStorage.getItem('currentUser')) {
+      localStorage.removeItem('currentUser')
+    }
+    if (localStorage.getItem('profileUser')) {
+      localStorage.removeItem('profileUser')
+    }
+  }, [])
 
   React.useEffect(() => {
     if (!isAuthenticated || user?.role !== 'principal') {
