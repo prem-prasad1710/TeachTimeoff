@@ -12,32 +12,11 @@ const leaveTypes = [
 
 export default function Dashboard(){
   const navigate = useNavigate()
-  const { user } = useAuth()
-  
-  // Get user data from AuthContext (MongoDB) - derive directly, no local state
-  const profile = {
-    name: user?.name || user?.fullName || 'User',
-    email: user?.email || '',
-    department: user?.department || 'Computer Applications',
-    role: user?.role || 'faculty',
-    profileImage: user?.avatar || user?.profileImage || null
-  }
-  
+  const [profile, setProfile] = React.useState({ name: 'kritika', email: 'kritika.yadav@jims.edu', department: 'Computer Applications' })
+  const [profileImage, setProfileImage] = React.useState(null)
   const [selectedType, setSelectedType] = useState('all')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [searchText, setSearchText] = useState('')
-  
-  // Clean up old localStorage keys on mount (one-time cleanup)
-  useEffect(() => {
-    if (localStorage.getItem('currentUser')) {
-      localStorage.removeItem('currentUser')
-      console.log('🧹 Cleaned up old currentUser from localStorage')
-    }
-    if (localStorage.getItem('profileUser')) {
-      localStorage.removeItem('profileUser')
-      console.log('🧹 Cleaned up old profileUser from localStorage')
-    }
-  }, [])
 
   const [leaveHistory] = useState([
     {
@@ -75,7 +54,8 @@ export default function Dashboard(){
       requestedBy: 'Himanshu Gola',
       actionOn: '29 Sep 2025',
       note: 'Not well today'
-    },
+    }
+    ,
     {
       id: 4,
       dates: '12 Nov 2025',
@@ -84,7 +64,7 @@ export default function Dashboard(){
       requestDate: '01 Nov 2025',
       status: 'Approved',
       approver: 'Amit Bora',
-      requestedBy: user?.name || user?.fullName || 'User',
+      requestedBy: 'Kritika Yadav',
       actionOn: '05 Nov 2025',
       note: 'Personal work'
     },
@@ -138,8 +118,16 @@ export default function Dashboard(){
     }
   ])
 
-  // Don't override profile with old cached data from localStorage
-  // The profile is already set correctly from currentUser above
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem('profileUser')
+      if (raw) setProfile(JSON.parse(raw))
+      const img = localStorage.getItem('profileImage')
+      if (img) setProfileImage(img)
+    } catch (err) {
+      // ignore
+    }
+  }, [])
 
   // filteredLeaves is derived from leaveHistory + filters
   const [filteredLeaves, setFilteredLeaves] = useState(leaveHistory)
