@@ -71,11 +71,10 @@ export default function Sidebar({open, onClose}){
           <span className="icon">👤</span>
           Profile
         </NavLink>
-        <NavLink to="/leave-request" className={({isActive})=> isActive? 'active':''}>
-          <span className="icon">📄</span>
-          Leave Requests
+        <NavLink to="/leave-balance" className={({isActive})=> isActive? 'active':''}>
+          <span className="icon">📊</span>
+          Leave Balance
         </NavLink>
-        <a href="#">📊 Leave Balance</a>
         <a href="#">📅 Holidays</a>
         <a href="#">⏻ Logout</a>
       </div>

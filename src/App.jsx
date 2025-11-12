@@ -6,7 +6,7 @@ import Footer from './components/Footer'
 import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
 import RequestDrawer from './components/RequestDrawer2'
-import LeaveRequest from './pages/LeaveRequest'
+import LeaveBalance from './pages/LeaveBalance'
 
 export default function App() {
   const [openDrawer, setOpenDrawer] = useState(false)
@@ -21,11 +21,10 @@ export default function App() {
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/leave-request" element={<LeaveRequest />} />
+            <Route path="/leave-balance" element={<LeaveBalance />} />
           </Routes>
         </main>
       </div>
-      <Footer />
       <RequestDrawer open={openDrawer} onClose={()=>setOpenDrawer(false)} />
     </div>
   )
