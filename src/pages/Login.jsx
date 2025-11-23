@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { authenticateUser } from '../utils/api-auth'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -33,19 +33,19 @@ export default function Login() {
       // Navigate based on role
       switch(user.role) {
         case 'faculty':
-          navigate('/faculty/dashboard')
+          navigate('/dashboard')
           break
         case 'coordinator':
-          navigate('/coordinator/dashboard')
+          navigate('/dashboard')
           break
         case 'chief_coordinator':
-          navigate('/chief-coordinator/dashboard')
+          navigate('/dashboard')
           break
         case 'principal':
-          navigate('/principal/dashboard')
+          navigate('/dashboard')
           break
         default:
-          navigate('/faculty/dashboard')
+          navigate('/dashboard')
       }
     } catch (error) {
       setError(error.message || 'Login failed. Please try again.')
@@ -126,7 +126,7 @@ export default function Login() {
           fontWeight: '700',
           margin: '0 0 8px 0',
           textShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>Welcome to TechTimeOff</h1>
+        }}>Welcome to TeachTimeOff</h1>
         
         <p style={{
           color: 'rgba(255,255,255,0.9)',
@@ -439,7 +439,7 @@ export default function Login() {
             color: 'rgba(255,255,255,0.7)',
             fontSize: '14px'
           }}>
-            Don't have an account? <a href="/signup" style={{ color: '#a78bfa', textDecoration: 'none', fontWeight: '600' }}>Sign up</a>
+            Don't have an account? <Link to="/signup" style={{ color: '#a78bfa', textDecoration: 'none', fontWeight: '600' }}>Sign up</Link>
           </p>
         </div>
 

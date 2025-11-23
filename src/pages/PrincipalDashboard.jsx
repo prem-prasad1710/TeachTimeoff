@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 export default function PrincipalDashboard(){
   const navigate = useNavigate()
   const { user, isAuthenticated } = useAuth()
+  console.log('PrincipalDashboard render - user:', user);
   
   const [institutionStats] = useState({
     totalFaculty: 45,

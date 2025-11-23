@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { registerUser } from '../utils/api-auth'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -89,19 +89,19 @@ export default function Signup() {
       // Navigate based on role
       switch(user.role) {
         case 'faculty':
-          navigate('/faculty/dashboard')
+          navigate('/dashboard')
           break
         case 'coordinator':
-          navigate('/coordinator/dashboard')
+          navigate('/dashboard')
           break
         case 'chief_coordinator':
-          navigate('/chief-coordinator/dashboard')
+          navigate('/dashboard')
           break
         case 'principal':
-          navigate('/principal/dashboard')
+          navigate('/dashboard')
           break
         default:
-          navigate('/faculty/dashboard')
+          navigate('/dashboard')
       }
     } catch (error) {
       console.error('Signup error:', error)
@@ -185,7 +185,7 @@ export default function Signup() {
           fontWeight: '700',
           margin: '0 0 8px 0',
           textShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>Join TechTimeOff</h1>
+        }}>Join TeachTimeOff</h1>
         
         <p style={{
           color: 'rgba(255,255,255,0.9)',
@@ -755,19 +755,15 @@ export default function Signup() {
             color: 'rgba(255,255,255,0.7)',
             fontSize: '14px'
           }}>
-            Already have an account? <a 
-              href="/login" 
-              onClick={(e) => {
-                e.preventDefault()
-                navigate('/login')
-              }}
+            Already have an account? <Link
+              to="/login" 
               style={{ 
                 color: '#a78bfa', 
                 textDecoration: 'none', 
                 fontWeight: '600',
                 cursor: 'pointer'
               }}
-            >Sign in</a>
+            >Sign in</Link>
           </p>
         </div>
 

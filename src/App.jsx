@@ -1,128 +1,78 @@
-import React, {useState, useEffect} from 'react'
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import React, {useState} from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { useAuth } from './contexts/AuthContext'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 import Footer from './components/Footer'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import AuthCallback from './pages/AuthCallback'
-import FacultyDashboard from './pages/FacultyDashboard'
-import CoordinatorDashboard from './pages/CoordinatorDashboard'
-import ChiefCoordinatorDashboard from './pages/ChiefCoordinatorDashboard'
-import PrincipalDashboard from './pages/PrincipalDashboard'
+import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
 import RequestDrawer from './components/RequestDrawer2'
-import LeaveBalance from './pages/LeaveBalance'
-import { useAuth } from './contexts/AuthContext'
-
-// Protected Route wrapper
-function ProtectedRoute({ children, allowedRoles }) {
-  const { user, isAuthenticated, loading } = useAuth()
-  
-  if (loading) {
-    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>Loading...</div>
-  }
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />
-  }
-  
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    // Redirect to their appropriate dashboard
-    switch(user.role) {
-      case 'faculty':
-        return <Navigate to="/faculty/dashboard" replace />
-      case 'coordinator':
-        return <Navigate to="/coordinator/dashboard" replace />
-      case 'chief_coordinator':
-        return <Navigate to="/chief-coordinator/dashboard" replace />
-      case 'principal':
-        return <Navigate to="/principal/dashboard" replace />
-      default:
-        return <Navigate to="/login" replace />
-    }
-  }
-  
-  return children
-}
+import LeaveRequest from './pages/LeaveRequest'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
 
 export default function App() {
+  const { isAuthenticated, loading } = useAuth()
   const [openDrawer, setOpenDrawer] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const location = useLocation()
-  const { isAuthenticated } = useAuth()
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup' || location.pathname === '/auth/callback'
 
-  if (isAuthPage) {
+  // Show loading spinner while checking authentication
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+      }}>
+        <div style={{
+          textAlign: 'center',
+          color: 'white'
+        }}>
+          <div style={{
+            width: '60px',
+            height: '60px',
+            border: '4px solid rgba(255,255,255,0.3)',
+            borderTop: '4px solid white',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p style={{ fontSize: '18px', fontWeight: '500' }}>Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // If not authenticated, show only login and signup pages
+  if (!isAuthenticated) {
     return (
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     )
   }
 
+  // If authenticated, show main app
   return (
     <div className="app-root">
       <Header onOpenRequest={()=>setOpenDrawer(true)} onToggleSidebar={()=>setSidebarOpen(v=>!v)} sidebarOpen={sidebarOpen} />
       <div className="app-body">
         <Sidebar open={sidebarOpen} onClose={()=>setSidebarOpen(false)} />
-        <main className={`main-root ${sidebarOpen ? 'shifted' : ''}`}>
+        <main className="main-root" style={{marginLeft: sidebarOpen ? 240 : 0, transition:'margin-left 0.3s'}}>
           <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            
-            {/* Faculty Routes */}
-            <Route path="/faculty/dashboard" element={
-              <ProtectedRoute allowedRoles={['faculty']}>
-                <FacultyDashboard />
-              </ProtectedRoute>
-            } />
-            
-            {/* Coordinator Routes */}
-            <Route path="/coordinator/dashboard" element={
-              <ProtectedRoute allowedRoles={['coordinator']}>
-                <CoordinatorDashboard />
-              </ProtectedRoute>
-            } />
-            
-            {/* Chief Coordinator Routes */}
-            <Route path="/chief-coordinator/dashboard" element={
-              <ProtectedRoute allowedRoles={['chief_coordinator']}>
-                <ChiefCoordinatorDashboard />
-              </ProtectedRoute>
-            } />
-            
-            {/* Principal Routes */}
-            <Route path="/principal/dashboard" element={
-              <ProtectedRoute allowedRoles={['principal']}>
-                <PrincipalDashboard />
-              </ProtectedRoute>
-            } />
-            
-            {/* Shared Routes - All authenticated users */}
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } />
-            <Route path="/leave-balance" element={
-              <ProtectedRoute>
-                <LeaveBalance />
-              </ProtectedRoute>
-            } />
-            
-            {/* Backward compatibility - redirect old /dashboard to appropriate role dashboard */}
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <FacultyDashboard />
-              </ProtectedRoute>
-            } />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/leave-request" element={<LeaveRequest />} />
+            <Route path="/login" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </main>
       </div>
+      <Footer />
       <RequestDrawer open={openDrawer} onClose={()=>setOpenDrawer(false)} />
     </div>
   )

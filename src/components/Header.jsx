@@ -1,35 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import React from 'react'
 
 export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
-  const navigate = useNavigate()
-  const { user, logout: authLogout } = useAuth()
-
-  const handleLogout = () => {
-    authLogout()
-    navigate('/login')
-  }
-  
-  // Clean up old localStorage keys on mount (one-time cleanup)
-  useEffect(() => {
-    if (localStorage.getItem('currentUser')) {
-      localStorage.removeItem('currentUser')
-      console.log('🧹 Cleaned up old currentUser from localStorage')
-    }
-    if (localStorage.getItem('profileUser')) {
-      localStorage.removeItem('profileUser')
-      console.log('🧹 Cleaned up old profileUser from localStorage')
-    }
-  }, [])
-
   return (
-    <div className={`topbar ${sidebarOpen ? 'shifted' : ''}`} style={{
+    <div className="topbar" style={{
+      width: '100%',
       position: 'relative', // Ensure navbar is not fixed or sticky
       top: 'unset',
       left: 'unset',
-      zIndex: 200,
-      background: 'rgba(255,255,255,0.95)',
+      zIndex: 10,
+      background: 'rgba(255,255,255,0.85)',
       boxShadow: '0 2px 8px rgba(44,62,255,0.07)',
       backdropFilter: 'blur(4px)'
     }}>
@@ -38,8 +17,11 @@ export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
           className="hamburger-btn"
           onClick={onToggleSidebar}
           style={{
+            position: 'absolute',
+            top: 14,
+            left: 14,
             background: 'none',
-            outline: 'none',
+            border: 'none',
             padding: 0,
             cursor: 'pointer',
             display: 'inline-flex',
@@ -47,7 +29,6 @@ export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
             justifyContent: 'center',
             height: 36,
             width: 36,
-            marginRight: 6,
             borderRadius: 6,
             transition: 'background 0.2s',
             backgroundColor: sidebarOpen ? 'rgba(37,99,235,0.08)' : 'transparent',
@@ -117,29 +98,10 @@ export default function Header({onOpenRequest, onToggleSidebar, sidebarOpen}){
         </button>
         <div className="top-user">
           <div style={{textAlign:'right'}}>
-            <div className="name">{user?.name || user?.fullName || 'User'}</div>
-            <div style={{fontSize:12,color:'var(--muted)'}}>{user?.role === 'faculty' ? 'Faculty' : user?.role === 'coordinator' ? 'Coordinator' : user?.role === 'chief_coordinator' ? 'Chief Coordinator' : user?.role === 'principal' ? 'Principal' : 'User'}</div>
+            <div className="name">Kritika Yadav</div>
+            <div style={{fontSize:12,color:'var(--muted)'}}>Admin</div>
           </div>
           <img src="https://i.pravatar.cc/100?img=12" alt="avatar" />
-          <button
-            onClick={handleLogout}
-            style={{
-              marginLeft: '12px',
-              padding: '8px 16px',
-              background: '#ef4444',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '600',
-              transition: 'transform 0.2s'
-            }}
-            onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
-            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-          >
-            Logout
-          </button>
         </div>
       </div>
     </div>
