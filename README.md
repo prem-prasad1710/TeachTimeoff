@@ -1,2 +1,1 @@
-<h1 style="text-align": "center";>TeachTimeoff</h1>
-My name is Prem
+<h1>This is student managment portal</h1>
